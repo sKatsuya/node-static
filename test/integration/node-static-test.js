@@ -265,8 +265,8 @@ suite.addBatch({
 .addBatch({
   'rewriting extention "js"': {
     topic : function(){
-      fileServer.match = 'js';
-      fileServer.replace = 'dev.js';
+      fileServer.options.match = 'js';
+      fileServer.options.replace = 'dev.js';
       return fileServer.rewrite('foo.js');
     },
     'should output "dev.js"' : function(topic){

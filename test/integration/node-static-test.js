@@ -260,5 +260,19 @@ suite.addBatch({
       assert.equal(response.statusCode, 404);
     }
   }
-}).export(module);
+})
+
+.addBatch({
+  'rewriting extention "js"': {
+    topic : function(){
+      fileServer.match = 'js';
+      fileServer.replace = 'dev.js';
+      return fileServer.rewrite('foo.js');
+    },
+    'should output "dev.js"' : function(topic){
+      assert.equal(topic, 'foo.dev.js');
+    }
+  }
+})
+.export(module);
 

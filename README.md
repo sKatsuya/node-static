@@ -199,3 +199,7 @@ Command Line Interface
 
     # show help message, including all options
     $ static -h
+
+    # set rewrite to return foo.dev.js from "foo.js" request.
+    $ static -m js -r dev.js
+    serving "." at http://127.0.0.1:8080

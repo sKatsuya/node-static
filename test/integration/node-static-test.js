@@ -261,16 +261,45 @@ suite.addBatch({
     }
   }
 })
-
 .addBatch({
-  'rewriting extention "js"': {
+  '"static -r js -m dev.js"': {
     topic : function(){
       fileServer.options.match = 'js';
       fileServer.options.replace = 'dev.js';
       return fileServer.rewrite('foo.js');
     },
-    'should output "dev.js"' : function(topic){
+    'should rewrite "xxx.dev.js" for all js files' : function(topic){
       assert.equal(topic, 'foo.dev.js');
+    }
+  },
+  '"static -r js -m"': {
+    topic : function(){
+      fileServer.options.match = 'js';
+      fileServer.options.replace = '';
+      return fileServer.rewrite('foo.js');
+    },
+    'should rewrite "foo."' : function(topic){
+      assert.equal(topic, 'foo.');
+    }
+  },
+  '"static -r -m dev.js"': {
+    topic : function(){
+      fileServer.options.match = '';
+      fileServer.options.replace = 'dev.js';
+      return fileServer.rewrite('foo.js');
+    },
+    'should not rewrite' : function(topic){
+      assert.equal(topic, 'foo.js');
+    }
+  },
+  '"static -r -m"': {
+    topic : function(){
+      fileServer.options.match = '';
+      fileServer.options.replace = '';
+      return fileServer.rewrite('foo.js');
+    },
+    'should not rewrite' : function(topic){
+      assert.equal(topic, 'foo.js');
     }
   }
 })

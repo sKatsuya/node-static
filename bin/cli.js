@@ -31,6 +31,14 @@ var fs = require('fs'),
             alias: 'f',
             description: 'JSON file of additional headers'
         })
+        .option('rewrite-match', {
+            alias: 'm',
+            description: 'rewrite-match'
+        })
+        .option('rewrite-replace', {
+            alias: 'r',
+            description: 'rewrite-replace'
+        })
         .option('help', {
             alias: 'h',
             description: 'display this help message'
@@ -84,11 +92,17 @@ if (argv['header-file']){
         JSON.parse(fs.readFileSync(argv['header-file']));
 }
 
+if (argv['rewrite-match'] && argv['rewrite-replace']){
+    (options = options || {}).match = argv['rewrite-match'] === true ? '' : argv['rewrite-match'];
+    (options = options || {}).replace = argv['rewrite-replace'] === true ? '' : argv['rewrite-replace'];
+}
+
 file = new(statik.Server)(dir, options);
 
 require('http').createServer(function (request, response) {
     request.addListener('end', function () {
         file.serve(request, response, function(e, rsp) {
+            request.url = file.rewrite(request.url);
             if (e && e.status === 404) {
                 response.writeHead(e.status, e.headers);
                 response.end(notFound);
